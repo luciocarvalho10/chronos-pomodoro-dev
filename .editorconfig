@@ -10,7 +10,7 @@ ij_continuation_indent_size = 8
 ij_formatter_off_tag = @formatter:off
 ij_formatter_on_tag = @formatter:on
 ij_formatter_tags_enabled = true
-ij_smart_tabs = false
+ij_smart_tabs = true
 ij_visual_guides = 
 ij_wrap_on_typing = false
 
@@ -329,7 +329,7 @@ ij_shell_redirect_followed_by_space = false
 ij_shell_switch_cases_indented = false
 ij_shell_use_unix_line_separator = true
 
-[{*.cjs,*.es6,*.js,*.mjs}]
+[{*.cjs,*.es6,*.js,*.mjs, *.jsx}]
 ij_continuation_indent_size = 4
 ij_javascript_align_imports = false
 ij_javascript_align_multiline_array_initializer_expression = false
