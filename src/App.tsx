@@ -20,6 +20,29 @@ function App() {
         <Container>
           <CountDown />
         </Container>
+
+        <Container>
+          <form action="">
+            <div className='formRow'>
+              <label htmlFor='menuInput'>task</label>
+              <input id='meuInput' type='text' />
+            </div>
+
+            <div className='formRow'>
+              <p>Lorem ipsom dolor sit amet</p>
+            </div>
+
+            <div className='formRow'>
+              <p>Ciclos</p>
+              <p>0 0 0 0 0 0 0</p>
+            </div>
+
+            <div className='formRow'>
+              <p>Ciclos</p>
+              <button>Enviar</button>
+            </div>
+          </form>
+        </Container>
       </>
   );
 }
