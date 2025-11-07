@@ -7,6 +7,8 @@ import { Menu } from './components/Menu';
 import { CountDown } from './components/CountDown';
 import { DefaultInput } from './components/DefaultInput';
 import { Cycles } from './components/Cycles';
+import { DefaultButton } from './components/Defaultbutton';
+import { PlayCircleIcon } from 'lucide-react';
 
 function App() {
   return (
@@ -34,7 +36,7 @@ function App() {
             </div>
 
             <div className='formRow'>
-              <button>Enviar</button>
+              <DefaultButton type={'submit'} icon={<PlayCircleIcon />} color={'green'} />
             </div>
           </form>
         </Container>
