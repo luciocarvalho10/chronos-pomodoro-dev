@@ -1,14 +1,15 @@
-import { useTask }                from '../../contexts/TaskContext/useTask.ts';
-import { type TaskModel }         from '../../models/TaskModel.tsx';
-import { type TaskStateModel }    from '../../models/TaskStateModel.tsx';
-import { getNextCycle }           from '../../utils/getNextCycle.ts';
-import { getNextCycleType }       from '../../utils/getNextCycleType.ts';
-import styles                     from './styles.module.css';
-import { DefaultInput }           from '../DefaultInput';
-import { Cycles }                 from '../Cycles';
-import { DefaultButton }          from '../Defaultbutton';
-import { PlayCircleIcon }         from 'lucide-react';
-import { type FormEvent, useRef } from 'react';
+import { useTask }                       from '../../contexts/TaskContext/useTask.ts';
+import { type TaskModel }                from '../../models/TaskModel.tsx';
+import { type TaskStateModel }           from '../../models/TaskStateModel.tsx';
+import { getMinutesAndSecondsFormatted } from '../../utils/getMinutesAndSecondsFormatted.ts';
+import { getNextCycle }                  from '../../utils/getNextCycle.ts';
+import { getNextCycleType }              from '../../utils/getNextCycleType.ts';
+import styles                            from './styles.module.css';
+import { DefaultInput }                  from '../DefaultInput';
+import { Cycles }                        from '../Cycles';
+import { DefaultButton }                 from '../Defaultbutton';
+import { PlayCircleIcon }                from 'lucide-react';
+import { type FormEvent, useRef }        from 'react';
 
 export function MainForm() {
   const taskNameInput = useRef<HTMLInputElement>( null );
@@ -43,15 +44,17 @@ export function MainForm() {
     const secondsRemaining = newTask.duration * 60;
     
     setState( (prevState: TaskStateModel) => {
-      return {
-        ...prevState,
+      const newTaskState = {
         activeTask: newTask,
         config: {...prevState.config},
         currentCycle: newStateToCurrentCycle,
-        formattedSecondsRemaining: '00:00',
+        formattedSecondsRemaining: getMinutesAndSecondsFormatted(
+          secondsRemaining ),
         secondsRemaining,
         tasks: [ ...prevState.tasks, newTask ],
       };
+      
+      return {...prevState, ...newTaskState};
     } );
   }
   
