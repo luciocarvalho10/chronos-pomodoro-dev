@@ -2,6 +2,7 @@ import { useTask }                from '../../contexts/TaskContext/useTask.ts';
 import { type TaskModel }         from '../../models/TaskModel.tsx';
 import { type TaskStateModel }    from '../../models/TaskStateModel.tsx';
 import { getNextCycle }           from '../../utils/getNextCycle.ts';
+import { getNextCycleType }       from '../../utils/getNextCycleType.ts';
 import styles                     from './styles.module.css';
 import { DefaultInput }           from '../DefaultInput';
 import { Cycles }                 from '../Cycles';
@@ -14,7 +15,8 @@ export function MainForm() {
   const {state, setState} = useTask();
   
   // ciclos
-  const nextCycle = getNextCycle( state.currentCycle );
+  const newStateToCurrentCycle = getNextCycle( state.currentCycle );
+  const typeToNewTask = getNextCycleType( newStateToCurrentCycle );
   
   function handleCreateNewTask(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -29,13 +31,13 @@ export function MainForm() {
     }
     
     const newTask: TaskModel = {
-      id: Date.now().toString(),
-      name: taskName,
-      duration: 1,
-      startDate: Date.now(),
       completeDate: null,
+      duration: 1,
+      id: Date.now().toString(),
       interruptDate: null,
-      type: 'workTime'
+      name: taskName,
+      startDate: Date.now(),
+      type: typeToNewTask
     };
     
     const secondsRemaining = newTask.duration * 60;
@@ -43,12 +45,12 @@ export function MainForm() {
     setState( (prevState: TaskStateModel) => {
       return {
         ...prevState,
-        tasks: [ ...prevState.tasks, newTask ],
-        secondsRemaining,
-        formattedSecondsRemaining: '00:00',
         activeTask: newTask,
-        currentCycle: nextCycle,
-        config: {...prevState.config}
+        config: {...prevState.config},
+        currentCycle: newStateToCurrentCycle,
+        formattedSecondsRemaining: '00:00',
+        secondsRemaining,
+        tasks: [ ...prevState.tasks, newTask ],
       };
     } );
   }
