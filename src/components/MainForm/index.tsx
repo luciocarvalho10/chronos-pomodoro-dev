@@ -15,7 +15,7 @@ export function MainForm() {
   const taskNameInput = useRef<HTMLInputElement>( null );
   const {state, setState} = useTask();
   
-  // ciclos
+  // cycles
   const newStateToCurrentCycle = getNextCycle( state.currentCycle );
   const typeToNewTask = getNextCycleType( newStateToCurrentCycle );
   
@@ -71,6 +71,7 @@ export function MainForm() {
           labelText={'task'}
           id={'meuInput'}
           ref={taskNameInput}
+          disabled={!!state.activeTask}
         />
       </div >
       
