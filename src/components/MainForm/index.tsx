@@ -59,7 +59,11 @@ export function MainForm() {
   }
   
   return (
-    <form onSubmit={handleCreateNewTask} className={styles.form} action="">
+    <form
+      onSubmit={handleCreateNewTask}
+      className={styles.form}
+      action=""
+    >
       <div className={styles.formRow}>
         <DefaultInput
           type="text"
@@ -68,19 +72,23 @@ export function MainForm() {
           id={'meuInput'}
           ref={taskNameInput}
         />
-      </div>
+      </div >
       
       <div className={styles.formRow}>
-        <Cycles/>
-      </div>
+        <p >Próximo intervalo é em {state.activeTask?.duration}min</p >
+      </div >
+      
+      <div className={styles.formRow}>
+        {state.currentCycle > 0 && <Cycles />}
+      </div >
       
       <div className={styles.formRow}>
         <DefaultButton
           type={'submit'}
           title={'Botão Iniciar Tarefa'}
-          icon={<PlayCircleIcon/>}
+          icon={<PlayCircleIcon />}
         />
-      </div>
-    </form>
+      </div >
+    </form >
   );
 }
