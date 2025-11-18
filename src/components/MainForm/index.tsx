@@ -1,3 +1,4 @@
+
 import { useTask }                       from '../../contexts/TaskContext/useTask.ts';
 import { type TaskModel }                from '../../models/TaskModel.tsx';
 import { type TaskStateModel }           from '../../models/TaskStateModel.tsx';
@@ -7,9 +8,9 @@ import { getNextCycleType }              from '../../utils/getNextCycleType.ts';
 import styles                            from './styles.module.css';
 import { DefaultInput }                  from '../DefaultInput';
 import { Cycles }                        from '../Cycles';
-import { DefaultButton }                 from '../Defaultbutton';
-import { PlayCircleIcon }                from 'lucide-react';
-import { type FormEvent, useRef }        from 'react';
+import { DefaultButton }                  from '../Defaultbutton';
+import { PlayCircleIcon, StopCircleIcon } from 'lucide-react';
+import { type FormEvent, useRef }         from 'react';
 
 export function MainForm() {
   const taskNameInput = useRef<HTMLInputElement>( null );
@@ -58,6 +59,21 @@ export function MainForm() {
     } );
   }
   
+  function handleInterruptTask() {
+    setState(prevState => {
+      const interruptDate = (task: TaskModel) =>
+        prevState.activeTask && prevState.activeTask.id === task.id ? { ...task, interruptDate: Date.now() } : task;
+      
+      return {
+        ...prevState,
+        activeTask: null,
+        formattedSecondsRemaining: '00:00',
+        secondsRemaining: 0,
+        tasks: prevState.tasks.map(interruptDate)
+      }
+    })
+  }
+  
   return (
     <form
       onSubmit={handleCreateNewTask}
@@ -84,11 +100,27 @@ export function MainForm() {
       </div >
       
       <div className={styles.formRow}>
-        <DefaultButton
-          type={'submit'}
-          title={'Botão Iniciar Tarefa'}
-          icon={<PlayCircleIcon />}
-        />
+        {!state.activeTask && (
+          <DefaultButton
+            aria-label={'Iniciar nova Tarefa'}
+            icon={<PlayCircleIcon />}
+            key={'Botão Iniciar nova Tarefa'}
+            title={'Botão Iniciar nova Tarefa'}
+            type={'submit'}
+          />
+        )}
+        
+        {!!state.activeTask && (
+          <DefaultButton
+            aria-label={'Interromper atual Tarefa'}
+            color={'red'}
+            icon={<StopCircleIcon />}
+            key={'Interromper atual Tarefa'}
+            onClick={handleInterruptTask}
+            title={'Interromper atual Tarefa'}
+            type={'button'}
+          />
+        )}
       </div >
     </form >
   );
