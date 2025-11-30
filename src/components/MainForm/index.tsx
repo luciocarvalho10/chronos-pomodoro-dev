@@ -1,20 +1,18 @@
-
-import { useTask }                       from '../../contexts/TaskContext/useTask.ts';
-import { type TaskModel }                from '../../models/TaskModel.tsx';
-import { type TaskStateModel }           from '../../models/TaskStateModel.tsx';
-import { getMinutesAndSecondsFormatted } from '../../utils/getMinutesAndSecondsFormatted.ts';
-import { getNextCycle }                  from '../../utils/getNextCycle.ts';
-import { getNextCycleType }              from '../../utils/getNextCycleType.ts';
-import styles                            from './styles.module.css';
-import { DefaultInput }                  from '../DefaultInput';
-import { Cycles }                        from '../Cycles';
-import { DefaultButton }                  from '../Defaultbutton';
 import { PlayCircleIcon, StopCircleIcon } from 'lucide-react';
 import { type FormEvent, useRef }         from 'react';
+import { TaskActionTypes }                from '../../contexts/TaskContext/taskActionsTypes.ts';
+import { useTask }                        from '../../contexts/TaskContext/useTask.ts';
+import { type TaskModel }                 from '../../models/TaskModel.tsx';
+import { getNextCycle }                   from '../../utils/getNextCycle.ts';
+import { getNextCycleType }               from '../../utils/getNextCycleType.ts';
+import { Cycles }                         from '../Cycles';
+import { DefaultButton }                  from '../Defaultbutton';
+import { DefaultInput }                   from '../DefaultInput';
+import styles                             from './styles.module.css';
 
 export function MainForm() {
   const taskNameInput = useRef<HTMLInputElement>( null );
-  const {state, setState} = useTask();
+  const {state, dispatch} = useTask();
   
   // cycles
   const newStateToCurrentCycle = getNextCycle( state.currentCycle );
@@ -42,36 +40,11 @@ export function MainForm() {
       type: typeToNewTask
     };
     
-    const secondsRemaining = newTask.duration * 60;
-    
-    setState( (prevState: TaskStateModel) => {
-      const newTaskState = {
-        activeTask: newTask,
-        config: {...prevState.config},
-        currentCycle: newStateToCurrentCycle,
-        formattedSecondsRemaining: getMinutesAndSecondsFormatted(
-          secondsRemaining ),
-        secondsRemaining,
-        tasks: [ ...prevState.tasks, newTask ],
-      };
-      
-      return {...prevState, ...newTaskState};
-    } );
+    dispatch( {type: TaskActionTypes.START_TASK, payload: newTask} );
   }
   
   function handleInterruptTask() {
-    setState(prevState => {
-      const interruptDate = (task: TaskModel) =>
-        prevState.activeTask && prevState.activeTask.id === task.id ? { ...task, interruptDate: Date.now() } : task;
-      
-      return {
-        ...prevState,
-        activeTask: null,
-        formattedSecondsRemaining: '00:00',
-        secondsRemaining: 0,
-        tasks: prevState.tasks.map(interruptDate)
-      }
-    })
+    dispatch( {type: TaskActionTypes.INTERRUPT_TASK} );
   }
   
   return (

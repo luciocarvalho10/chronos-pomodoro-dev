@@ -1,5 +1,6 @@
 import type { TaskStateModel }                   from '../../models/TaskStateModel.tsx';
-import { type TaskActionModel, TaskActionTypes } from './taskActions.ts';
+import { interruptTask, startTask }              from './taskActions.ts';
+import { type TaskActionModel, TaskActionTypes } from './taskActionsTypes.ts';
 
 export function taskReducer(
   state: TaskStateModel,
@@ -7,10 +8,10 @@ export function taskReducer(
 ): TaskStateModel {
   switch ( action.type ) {
     case TaskActionTypes.START_TASK: {
-      return state;
+      return startTask( state, action.payload );
     }
     case TaskActionTypes.INTERRUPT_TASK: {
-      return state;
+      return interruptTask( state );
     }
     case TaskActionTypes.RESET_STATE: {
       return state;
