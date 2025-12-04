@@ -8,6 +8,7 @@ import { getNextCycleType }               from '../../utils/getNextCycleType.ts'
 import { Cycles }                         from '../Cycles';
 import { DefaultButton }                  from '../Defaultbutton';
 import { DefaultInput }                   from '../DefaultInput';
+import { Tips }                           from '../Tips';
 import styles                             from './styles.module.css';
 
 export function MainForm() {
@@ -65,7 +66,7 @@ export function MainForm() {
       </div >
       
       <div className={styles.formRow}>
-        <p >Próximo intervalo é em {state.activeTask?.duration}min</p >
+        <Tips />
       </div >
       
       <div className={styles.formRow}>
