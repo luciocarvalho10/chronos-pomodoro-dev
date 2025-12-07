@@ -4,19 +4,21 @@ import { getMinutesAndSecondsFormatted } from '../../utils/getMinutesAndSecondsF
 import { getNextCycle }                  from '../../utils/getNextCycle.ts';
 
 export const startTask = (state: TaskStateModel, payload: TaskModel) => {
-  const newTask = payload;
-  const newStateToCurrentCycle = getNextCycle( state.currentCycle );
+  const activeTask = payload;
+  const currentCycle = getNextCycle( state.currentCycle );
   const secondsRemaining = payload.duration * 60;
+  const formattedSecondsRemaining = getMinutesAndSecondsFormatted(
+    secondsRemaining );
+  const tasks = [ ...state.tasks, activeTask ];
   
   return {
     ...state,
-    activeTask: newTask,
+    activeTask,
     config: {...state.config},
-    currentCycle: newStateToCurrentCycle,
-    formattedSecondsRemaining: getMinutesAndSecondsFormatted(
-      secondsRemaining ),
+    currentCycle,
+    formattedSecondsRemaining,
     secondsRemaining,
-    tasks: [ ...state.tasks, newTask ],
+    tasks,
   };
 };
 
@@ -35,3 +37,30 @@ export const interruptTask = (state: TaskStateModel) => {
     tasks: state.tasks.map( interruptDate )
   };
 };
+
+export const resetState = (state: TaskStateModel) => state;
+
+export const completeTask = (state: TaskStateModel) => {
+  const completeDate = (task: TaskModel) =>
+    state.activeTask && state.activeTask.id === task.id ? {
+      ...task,
+      completeDate: Date.now()
+    } : task;
+  
+  return {
+    ...state,
+    activeTask: null,
+    formattedSecondsRemaining: '00:00',
+    secondsRemaining: 0,
+    tasks: state.tasks.map( completeDate )
+  };
+};
+
+export const countDown = (state: TaskStateModel, payload: {
+  secondsRemaining: number
+}) => ( {
+  ...state,
+  secondsRemaining: payload.secondsRemaining,
+  formattedSecondsRemaining: getMinutesAndSecondsFormatted(
+    payload.secondsRemaining )
+} );

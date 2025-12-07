@@ -1,6 +1,7 @@
 import { type ReactNode, useEffect, useMemo, useReducer } from 'react';
 import { TimerWorkerManager }                             from '../../workers/TimerWorkerManager.ts';
 import { initialTaskState }                               from './initialTaskState.ts';
+import { TaskActionTypes }                                from "./taskActionsTypes.ts";
 import { TaskContext }                                    from "./TaskContext.tsx";
 import { taskReducer }                                    from './taskReducer.ts';
 
@@ -20,14 +21,22 @@ export function TaskProvider({children}: TaskProviderProps) {
     const countDownSeconds = e.data;
     console.log( countDownSeconds );
     
-    if ( countDownSeconds === 0 ) {
-      console.log( 'Woker finalizado -- com activeTask' );
+    if ( countDownSeconds <= 0 ) {
+      dispatch( {type: TaskActionTypes.COMPLETE_TASK} );
       worker.terminate();
+    }
+    else {
+      dispatch( {
+        type: TaskActionTypes.COUNT_DOWN,
+        payload: {secondsRemaining: countDownSeconds}
+      } );
     }
   } );
   
   
   useEffect( () => {
+    console.log( value.state );
+    
     if ( !value.state.activeTask ) {
       console.log( 'Woker finalizado -- sem activeTask' );
       worker.terminate();
