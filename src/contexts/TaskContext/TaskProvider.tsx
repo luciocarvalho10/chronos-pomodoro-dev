@@ -1,14 +1,16 @@
-import { type ReactNode, useEffect, useMemo, useReducer } from 'react';
-import { TimerWorkerManager }                             from '../../workers/TimerWorkerManager.ts';
-import { initialTaskState }                               from './initialTaskState.ts';
-import { TaskActionTypes }                                from "./taskActionsTypes.ts";
-import { TaskContext }                                    from "./TaskContext.tsx";
-import { taskReducer }                                    from './taskReducer.ts';
+import { type ReactNode, useEffect, useMemo, useReducer, useRef } from 'react';
+import { loadBeep }                                               from '../../utils/loadBeep.ts';
+import { TimerWorkerManager }                                     from '../../workers/TimerWorkerManager.ts';
+import { initialTaskState }                                       from './initialTaskState.ts';
+import { TaskActionTypes }                                        from "./taskActionsTypes.ts";
+import { TaskContext }                                            from "./TaskContext.tsx";
+import { taskReducer }                                            from './taskReducer.ts';
 
 type TaskProviderProps = { children?: ReactNode };
 
 export function TaskProvider({children}: TaskProviderProps) {
   const [ state, dispatch ] = useReducer( taskReducer, initialTaskState );
+  const playBeepRef = useRef<ReturnType<typeof loadBeep>>( null );
   
   const value = useMemo( () => ( {
     state,
@@ -19,9 +21,13 @@ export function TaskProvider({children}: TaskProviderProps) {
   
   worker.onmessage( e => {
     const countDownSeconds = e.data;
-    console.log( countDownSeconds );
     
     if ( countDownSeconds <= 0 ) {
+      if ( playBeepRef.current ) {
+        playBeepRef.current();
+        playBeepRef.current = null;
+      }
+      
       dispatch( {type: TaskActionTypes.COMPLETE_TASK} );
       worker.terminate();
     }
@@ -35,15 +41,18 @@ export function TaskProvider({children}: TaskProviderProps) {
   
   
   useEffect( () => {
-    console.log( value.state );
-    
     if ( !value.state.activeTask ) {
-      console.log( 'Woker finalizado -- sem activeTask' );
       worker.terminate();
     }
     
     worker.postMessage( value.state );
   }, [ value.state, worker ] );
+  
+  useEffect( () => {
+    if ( state.activeTask && playBeepRef.current === null ) {
+      playBeepRef.current = loadBeep();
+    }
+  }, [ state.activeTask ] );
   
   return (
     <TaskContext.Provider value={value}>
