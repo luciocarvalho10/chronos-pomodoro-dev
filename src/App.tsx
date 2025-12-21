@@ -1,14 +1,34 @@
 import './styles/theme.css';
 import './styles/global.css';
-import { MessagesContainer } from './components/MessagesContainer';
-import { Providers }         from './contexts/providers.tsx';
-import { Home }              from './pages/Home';
+import { BrowserRouter, Route, Routes } from 'react-router';
+import { MessagesContainer }            from './components/MessagesContainer';
+import { Providers }                    from './contexts/providers.tsx';
+import { AboutPomodoro }                from './pages/AboutPomodoro';
+import { Home }                         from './pages/Home';
+import { NotFound }                     from './pages/NotFound';
 
 function App() {
   return (
     <Providers >
       <MessagesContainer >
-        <Home />
+        <BrowserRouter >
+          <Routes >
+            <Route
+              path="/"
+              element={<Home />}
+            />
+            
+            <Route
+              path="/about-pomodoro"
+              element={<AboutPomodoro />}
+            />
+            
+            <Route
+              path="*"
+              element={<NotFound />}
+            />
+          </Routes >
+        </BrowserRouter >
       </MessagesContainer >
     </Providers >
   );
