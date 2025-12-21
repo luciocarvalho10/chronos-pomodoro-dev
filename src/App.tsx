@@ -1,15 +1,17 @@
 import './styles/theme.css';
 import './styles/global.css';
-
-import { Home } from './pages/Home';
-import { Providers } from './contexts/providers.tsx';
+import { MessagesContainer } from './components/MessagesContainer';
+import { Providers }         from './contexts/providers.tsx';
+import { Home }              from './pages/Home';
 
 function App() {
   return (
-      <Providers>
+    <Providers >
+      <MessagesContainer >
         <Home />
-      </Providers>
-  )
+      </MessagesContainer >
+    </Providers >
+  );
 }
 
 export default App;

@@ -1,5 +1,6 @@
 import { PlayCircleIcon, StopCircleIcon } from 'lucide-react';
 import { type FormEvent, useRef }         from 'react';
+import { ToastAdapter }                   from '../../adapters/ToastAdapter.ts';
 import { TaskActionTypes }                from '../../contexts/TaskContext/taskActionsTypes.ts';
 import { useTask }                        from '../../contexts/TaskContext/useTask.ts';
 import { type TaskModel }                 from '../../models/TaskModel.tsx';
@@ -21,13 +22,14 @@ export function MainForm() {
   
   function handleCreateNewTask(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    ToastAdapter.dismiss();
     
     if ( !taskNameInput.current ) return;
     
     const taskName = taskNameInput.current.value.trim();
     
     if ( !taskName ) {
-      alert( 'Por favor, digite um nome para a tarefa.' );
+      ToastAdapter.warn( 'Por favor, digite um nome para a tarefa!' );
       return;
     }
     
@@ -42,9 +44,13 @@ export function MainForm() {
     };
     
     dispatch( {type: TaskActionTypes.START_TASK, payload: newTask} );
+    
+    ToastAdapter.success( 'Tarefa Iniciada!' );
   }
   
   function handleInterruptTask() {
+    ToastAdapter.dismiss();
+    ToastAdapter.error( 'Tarefa Interrompida!' );
     dispatch( {type: TaskActionTypes.INTERRUPT_TASK} );
   }
   
