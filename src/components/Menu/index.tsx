@@ -5,7 +5,7 @@ import {
   SettingsIcon,
   SunIcon
 }                              from 'lucide-react';
-import { Link }                from 'react-router';
+import { RouterLink }          from '../RouterLink';
 import styles                  from './styles.module.css';
 import { useEffect, useState } from 'react';
 import * as React              from 'react';
@@ -32,39 +32,39 @@ export function Menu() {
   
   return (
     <nav className={styles.menu}>
-      <Link
+      <RouterLink
         className={styles.menuLink}
-        to="/"
+        href="/"
         arial-label="Ir para Home"
         title="Ir para Home"
       >
         <HouseIcon />
-      </Link >
-      <Link
+      </RouterLink >
+      <RouterLink
         className={styles.menuLink}
-        to="#"
+        href="#"
         arial-label="Ver Histórico"
         title="Ver Histórico"
       >
         <HistoryIcon />
-      </Link >
-      <Link
+      </RouterLink >
+      <RouterLink
         className={styles.menuLink}
-        to="#"
+        href="#"
         arial-label="Configurações"
         title="Configurações"
       >
         <SettingsIcon />
-      </Link >
-      <Link
+      </RouterLink >
+      <a
         className={styles.menuLink}
-        to="#"
+        href="#"
         arial-label="Mudar Tema"
         title="Mudar Tema"
         onClick={toggleTheme}
       >
         {nextThemeIcon[ theme ]}
-      </Link >
+      </a >
     </nav >
   );
 }
