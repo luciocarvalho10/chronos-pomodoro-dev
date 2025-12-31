@@ -13,8 +13,9 @@ import { Tips }                           from '../Tips';
 import styles                             from './styles.module.css';
 
 export function MainForm() {
-  const taskNameInput = useRef<HTMLInputElement>( null );
   const {state, dispatch} = useTask();
+  const taskNameInput = useRef<HTMLInputElement>( null );
+  const lastTaskName = state.tasks.at( - 1 )?.name;
   
   // cycles
   const newStateToCurrentCycle = getNextCycle( state.currentCycle );
@@ -68,6 +69,7 @@ export function MainForm() {
           id={'meuInput'}
           ref={taskNameInput}
           disabled={!!state.activeTask}
+          defaultValue={lastTaskName}
         />
       </div >
       

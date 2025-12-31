@@ -41,18 +41,23 @@ export function TaskProvider({children}: TaskProviderProps) {
   
   
   useEffect( () => {
-    if ( !value.state.activeTask ) {
+    const {activeTask: task, formattedSecondsRemaining: time} = value.state;
+    
+    if ( !task ) {
       worker.terminate();
     }
+    
+    document.title =
+      `${time} - ${task?.name || 'Sem tarefa ativa'} - Chronos Pomodoro`;
     
     worker.postMessage( value.state );
   }, [ value.state, worker ] );
   
   useEffect( () => {
-    if ( state.activeTask && playBeepRef.current === null ) {
+    if ( value.state.activeTask && playBeepRef.current === null ) {
       playBeepRef.current = loadBeep();
     }
-  }, [ state.activeTask ] );
+  }, [ value.state.activeTask ] );
   
   return (
     <TaskContext.Provider value={value}>
