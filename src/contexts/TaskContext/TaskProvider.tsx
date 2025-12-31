@@ -30,7 +30,7 @@ export function TaskProvider({children}: TaskProviderProps) {
   const value = useMemo( () => ( {
     state,
     dispatch,
-  } ), [ state, dispatch ] );
+  } ), [ state, dispatch ]);
   
   const worker = TimerWorkerManager.getInstance();
   
