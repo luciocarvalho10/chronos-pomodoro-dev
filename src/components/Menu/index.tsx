@@ -6,7 +6,9 @@ import * as React from 'react';
 type Themes = 'light' | 'dark';
 
 export function Menu() {
-  const [theme, setTheme] = useState<Themes>(() => localStorage.getItem('theme') as Themes || 'dark' );
+  const [theme, setTheme] = useState<Themes>(
+    () => localStorage.getItem('theme') as Themes || 'dark'
+  );
   const nextThemeIcon = {
     dark: <SunIcon />,
     light: <MoonIcon />

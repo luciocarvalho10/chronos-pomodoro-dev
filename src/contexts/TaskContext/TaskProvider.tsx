@@ -9,7 +9,22 @@ import { taskReducer }                                            from './taskRe
 type TaskProviderProps = { children?: ReactNode };
 
 export function TaskProvider({children}: TaskProviderProps) {
-  const [ state, dispatch ] = useReducer( taskReducer, initialTaskState );
+  const storageState = () => {
+    const storagedState = localStorage.getItem('chronos-pomodoro:state');
+    
+    if ( storagedState === null ) return initialTaskState;
+    
+    const parsedStoragedState = JSON.parse( storagedState ) as typeof initialTaskState;
+    
+    return {
+      ...parsedStoragedState,
+      activeTask: null,
+      secondsRemaining: 0,
+      formattedSecondsRemaining: '00:00'
+    };
+  }
+  
+  const [ state, dispatch ] = useReducer( taskReducer, initialTaskState, storageState );
   const playBeepRef = useRef<ReturnType<typeof loadBeep>>( null );
   
   const value = useMemo( () => ( {
@@ -41,6 +56,8 @@ export function TaskProvider({children}: TaskProviderProps) {
   
   
   useEffect( () => {
+    localStorage.setItem('chronos-pomodoro:state', JSON.stringify( value.state ));
+    
     if ( !value.state.activeTask ) {
       worker.terminate();
     }
