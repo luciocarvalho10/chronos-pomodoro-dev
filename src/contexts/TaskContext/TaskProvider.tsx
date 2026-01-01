@@ -10,7 +10,7 @@ type TaskProviderProps = { children?: ReactNode };
 
 export function TaskProvider({children}: TaskProviderProps) {
   const storageState = () => {
-    const storagedState = localStorage.getItem('chronos-pomodoro:state');
+    const storagedState = localStorage.getItem( 'chronos-pomodoro:state' );
     
     if ( storagedState === null ) return initialTaskState;
     
@@ -22,7 +22,7 @@ export function TaskProvider({children}: TaskProviderProps) {
       secondsRemaining: 0,
       formattedSecondsRemaining: '00:00'
     };
-  }
+  };
   
   const [ state, dispatch ] = useReducer( taskReducer, initialTaskState, storageState );
   const playBeepRef = useRef<ReturnType<typeof loadBeep>>( null );
@@ -57,19 +57,21 @@ export function TaskProvider({children}: TaskProviderProps) {
   
   useEffect( () => {
     localStorage.setItem('chronos-pomodoro:state', JSON.stringify( value.state ));
+    const {activeTask: task, formattedSecondsRemaining: time} = value.state;
     
-    if ( !value.state.activeTask ) {
-      worker.terminate();
-    }
+    if ( !task ) worker.terminate();
+    
+    document.title =
+      `${time} - ${task?.name || 'Sem tarefa ativa'} - Chronos Pomodoro`;
     
     worker.postMessage( value.state );
   }, [ value.state, worker ] );
   
   useEffect( () => {
-    if ( state.activeTask && playBeepRef.current === null ) {
+    if ( value.state.activeTask && playBeepRef.current === null ) {
       playBeepRef.current = loadBeep();
     }
-  }, [ state.activeTask ] );
+  }, [ value.state.activeTask ] );
   
   return (
     <TaskContext.Provider value={value}>
