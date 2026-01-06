@@ -11,7 +11,8 @@ import { ROUTES }              from '../../router/routes.tsx';
 import { RouterLink }          from '../RouterLink';
 import styles                  from './styles.module.css';
 
-type Themes = 'light' | 'dark';
+export type Themes = 'light' | 'dark';
+
 
 export function Menu() {
   const [ theme, setTheme ] = useState<Themes>( () =>

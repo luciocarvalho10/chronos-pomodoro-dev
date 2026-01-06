@@ -61,8 +61,7 @@ export function TaskProvider({children}: TaskProviderProps) {
     
     if ( !task ) worker.terminate();
     
-    document.title =
-      `${time} - ${task?.name || 'Sem tarefa ativa'} - Chronos Pomodoro`;
+    document.title = `${time} - ${task?.name || 'Sem tarefa ativa'} - Chronos Pomodoro`;
     
     worker.postMessage( value.state );
   }, [ value.state, worker ] );
