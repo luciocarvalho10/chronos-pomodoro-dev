@@ -11,12 +11,12 @@ import { ROUTES }              from '../../router/routes.tsx';
 import { RouterLink }          from '../RouterLink';
 import styles                  from './styles.module.css';
 
-export type Themes = 'light' | 'dark';
-
+type Themes = 'light' | 'dark';
 
 export function Menu() {
-  const [ theme, setTheme ] = useState<Themes>( () =>
-    localStorage.getItem( 'theme' ) as Themes || 'dark' );
+  const [ theme, setTheme ] = useState<Themes>(
+    () => localStorage.getItem( 'theme' ) as Themes || 'dark'
+  );
   const nextThemeIcon = {
     dark: <SunIcon />,
     light: <MoonIcon />

@@ -30,7 +30,7 @@ export function TaskProvider({children}: TaskProviderProps) {
   const value = useMemo( () => ( {
     state,
     dispatch,
-  } ), [ state, dispatch ]);
+  } ), [ state, dispatch ] );
   
   const worker = TimerWorkerManager.getInstance();
   
@@ -56,7 +56,7 @@ export function TaskProvider({children}: TaskProviderProps) {
   
   
   useEffect( () => {
-    localStorage.setItem('chronos-pomodoro:state', JSON.stringify( value.state ));
+    localStorage.setItem( 'chronos-pomodoro:state', JSON.stringify( value.state ) );
     const {activeTask: task, formattedSecondsRemaining: time} = value.state;
     
     if ( !task ) worker.terminate();
