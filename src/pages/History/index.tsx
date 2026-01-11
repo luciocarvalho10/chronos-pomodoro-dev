@@ -1,8 +1,9 @@
 import { TrashIcon }                        from 'lucide-react';
-import { useState }                         from 'react';
+import { useEffect, useState }              from 'react';
 import { Container }                        from '../../components/Container';
 import { DefaultButton }                    from '../../components/Defaultbutton';
 import { Heading }                          from '../../components/Heading';
+import { TaskActionTypes }                  from '../../contexts/TaskContext/taskActionsTypes.ts';
 import { useTask }                          from '../../contexts/TaskContext/useTask.ts';
 import { MainTemplate }                     from '../../templates/MainTemplate';
 import { formatDate }                       from '../../utils/formatDate.ts';
@@ -12,7 +13,9 @@ import { sortTasks, type SortTasksOptions } from '../../utils/sortTasks.ts';
 import styles                               from './style.module.css';
 
 export function History() {
-  const {state} = useTask();
+  const {state, dispatch} = useTask();
+  const hasTasks = state.tasks.length > 0;
+  
   const [ sortTasksOptions, setSortTasksOptions ] = useState<SortTasksOptions>(
     () => ( {
       tasks: sortTasks( {tasks: state.tasks} ),
@@ -20,6 +23,17 @@ export function History() {
       direction: 'desc'
     } )
   );
+  
+  useEffect( () => {
+    setSortTasksOptions( prevState => ( {
+      ...prevState,
+      tasks: sortTasks( {
+        tasks: state.tasks,
+        direction: prevState.direction,
+        field: prevState.field
+      } )
+    } ) );
+  }, [ state.tasks ] );
   
   function handleSortTasks({field}: Pick<SortTasksOptions, 'field'>) {
     const newDirection = sortTasksOptions.direction === 'asc' ? 'desc' : 'asc';
@@ -34,60 +48,77 @@ export function History() {
     } );
   }
   
+  function handleResetHistory() {
+    if ( !confirm( 'Tem certeza?' ) ) return;
+    
+    dispatch( {type: TaskActionTypes.RESET_STATE} );
+  }
+  
   return (
     <MainTemplate >
       <Container >
         <Heading >
           <span >History</span >
-          <span className={styles.buttonContainer}>
+          {hasTasks && (
+            <span className={styles.buttonContainer}>
               <DefaultButton
                 icon={<TrashIcon />}
                 color="red"
                 aria-label="Apagar todo o histórico"
                 title="Apagar histórico"
+                onClick={handleResetHistory}
               />
             </span >
+          )}
         </Heading >
       </Container >
       
       <Container >
-        <div className={styles.responsibleTable}>
-          <table >
-            <thead >
-            <tr >
-              <th
-                onClick={() => handleSortTasks( {field: 'name'} )}
-                className={styles.thSort}
-              >Tarefa ↕️
-              </th >
-              <th
-                onClick={() => handleSortTasks( {field: 'duration'} )}
-                className={styles.thSort}
-              >Duração ↕️
-              </th >
-              <th
-                onClick={() => handleSortTasks( {field: 'startDate'} )}
-                className={styles.thSort}
-              >Data ↕️
-              </th >
-              <th >Status</th >
-              <th >Tipo</th >
-            </tr >
-            </thead >
-            
-            <tbody >
-            {sortTasksOptions.tasks.map( (task) => (
-              <tr key={task.id}>
-                <td >{task.name}</td >
-                <td >{task.duration}min</td >
-                <td >{formatDate( task.startDate )}</td >
-                <td >{getTaskStatus( task, state.activeTask )}</td >
-                <td >{getTaskType( task.type )}</td >
+        {hasTasks && (
+          <div className={styles.responsibleTable}>
+            <table >
+              <thead >
+              <tr >
+                <th
+                  onClick={() => handleSortTasks( {field: 'name'} )}
+                  className={styles.thSort}
+                >Tarefa ↕️
+                </th >
+                <th
+                  onClick={() => handleSortTasks( {field: 'duration'} )}
+                  className={styles.thSort}
+                >Duração ↕️
+                </th >
+                <th
+                  onClick={() => handleSortTasks( {field: 'startDate'} )}
+                  className={styles.thSort}
+                >Data ↕️
+                </th >
+                <th >Status</th >
+                <th >Tipo</th >
               </tr >
-            ) )}
-            </tbody >
-          </table >
-        </div >
+              </thead >
+              
+              <tbody >
+              {sortTasksOptions.tasks.map( (task) => (
+                <tr key={task.id}>
+                  <td >{task.name}</td >
+                  <td >{task.duration}min</td >
+                  <td >{formatDate( task.startDate )}</td >
+                  <td >{getTaskStatus( task, state.activeTask )}</td >
+                  <td >{getTaskType( task.type )}</td >
+                </tr >
+              ) )}
+              </tbody >
+            </table >
+          </div >
+        )}
+        
+        {!hasTasks && (
+          <p style={{textAlign: 'center', fontWeight: 'bold'}}>
+            Ainda não existem tarefas criadas.
+          </p >
+        )}
       </Container >
     </MainTemplate >
   );

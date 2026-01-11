@@ -2,6 +2,7 @@ import type { TaskModel }                from '../../models/TaskModel.tsx';
 import type { TaskStateModel }           from '../../models/TaskStateModel.tsx';
 import { getMinutesAndSecondsFormatted } from '../../utils/getMinutesAndSecondsFormatted.ts';
 import { getNextCycle }                  from '../../utils/getNextCycle.ts';
+import { initialTaskState }              from './initialTaskState.ts';
 
 export const startTask = (state: TaskStateModel, payload: TaskModel) => {
   const activeTask = payload;
@@ -38,7 +39,7 @@ export const interruptTask = (state: TaskStateModel) => {
   };
 };
 
-export const resetState = (state: TaskStateModel) => state;
+export const resetState = () => ( {...initialTaskState} );
 
 export const completeTask = (state: TaskStateModel) => {
   const completeDate = (task: TaskModel) =>

@@ -23,7 +23,7 @@ export function taskReducer(
       return interruptTask( state );
     }
     case TaskActionTypes.RESET_STATE: {
-      return resetState( state );
+      return resetState();
     }
     case TaskActionTypes.COMPLETE_TASK: {
       return completeTask( state );
