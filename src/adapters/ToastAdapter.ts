@@ -1,4 +1,5 @@
-import { toast } from 'react-toastify';
+import { toast }  from 'react-toastify';
+import { Dialog } from '../components/Dialog';
 
 
 export const ToastAdapter = {
@@ -8,4 +9,13 @@ export const ToastAdapter = {
   warning: (msg: string) => toast.warning( msg ),
   info: (msg: string) => toast.info( msg ),
   dismiss: () => toast.dismiss(),
+  confirm: (data: string, onClosing: (confirmation: boolean) => void) =>
+    toast( Dialog, {
+      data,
+      onClose: confirmation => confirmation ? onClosing( true ) : onClosing( false ),
+      autoClose: false,
+      closeOnClick: false,
+      closeButton: false,
+      draggable: false
+    } )
 };

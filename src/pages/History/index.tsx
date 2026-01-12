@@ -1,5 +1,6 @@
 import { TrashIcon }                        from 'lucide-react';
 import { useEffect, useState }              from 'react';
+import { ToastAdapter }                     from '../../adapters/ToastAdapter.ts';
 import { Container }                        from '../../components/Container';
 import { DefaultButton }                    from '../../components/Defaultbutton';
 import { Heading }                          from '../../components/Heading';
@@ -14,6 +15,7 @@ import styles                               from './style.module.css';
 
 export function History() {
   const {state, dispatch} = useTask();
+  const [ clearHistory, setClearHistory ] = useState( false );
   const hasTasks = state.tasks.length > 0;
   
   const [ sortTasksOptions, setSortTasksOptions ] = useState<SortTasksOptions>(
@@ -35,6 +37,16 @@ export function History() {
     } ) );
   }, [ state.tasks ] );
   
+  useEffect( () => {
+    if ( !clearHistory ) return;
+    
+    setClearHistory( false );
+    
+    dispatch( {type: TaskActionTypes.RESET_STATE} );
+  }, [ clearHistory, dispatch ] );
+  
+  useEffect( () => () => ToastAdapter.dismiss(), [] );
+  
   function handleSortTasks({field}: Pick<SortTasksOptions, 'field'>) {
     const newDirection = sortTasksOptions.direction === 'asc' ? 'desc' : 'asc';
     setSortTasksOptions( {
@@ -49,9 +61,10 @@ export function History() {
   }
   
   function handleResetHistory() {
-    if ( !confirm( 'Tem certeza?' ) ) return;
-    
-    dispatch( {type: TaskActionTypes.RESET_STATE} );
+    ToastAdapter.dismiss();
+    ToastAdapter.confirm(
+      'Tem certeza?', confirmation => setClearHistory( confirmation )
+    );
   }
   
   return (
