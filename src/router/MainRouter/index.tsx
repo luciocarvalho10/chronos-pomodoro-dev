@@ -29,6 +29,11 @@ export function MainRouter() {
         />
         
         <Route
+          path={ROUTES.SETTINGS.path}
+          element={ROUTES.SETTINGS.element}
+        />
+        
+        <Route
           path={ROUTES.ABOUT_POMODORO.path}
           element={ROUTES.ABOUT_POMODORO.element}
         />
