@@ -5,12 +5,13 @@ import { Container }              from '../../components/Container';
 import { DefaultButton }          from '../../components/Defaultbutton';
 import { DefaultInput }           from '../../components/DefaultInput';
 import { Heading }                from '../../components/Heading';
+import { TaskActionTypes }        from '../../contexts/TaskContext/taskActionsTypes.ts';
 import { useTask }                from '../../contexts/TaskContext/useTask.ts';
 import { MainTemplate }           from '../../templates/MainTemplate';
 import styles                     from './styles.module.css';
 
 export function Settings() {
-  const {state} = useTask();
+  const {state, dispatch} = useTask();
   const workTimeInput = useRef<HTMLInputElement>( null );
   const shortBreakTimeInput = useRef<HTMLInputElement>( null );
   const longBreakTimeInput = useRef<HTMLInputElement>( null );
@@ -45,7 +46,16 @@ export function Settings() {
       formErrors.forEach( (error) => ToastAdapter.error( error ) );
     }
     
-    console.log( workTime, shortBreakTime, longBreakTime );
+    dispatch( {
+      type: TaskActionTypes.CHANGE_SETTINGS,
+      payload: {
+        workTime,
+        shortBreakTime,
+        longBreakTime
+      }
+    } );
+    
+    ToastAdapter.success( 'Configurações salvas!' );
   }
   
   return (

@@ -1,5 +1,6 @@
 import type { TaskStateModel } from '../../models/TaskStateModel.tsx';
 import {
+  changeSettings,
   completeTask,
   countDown,
   interruptTask,
@@ -16,8 +17,14 @@ export function taskReducer(
   action: TaskActionModel
 ): TaskStateModel {
   switch ( action.type ) {
-    case TaskActionTypes.START_TASK: {
-      return startTask( state, action.payload );
+    case TaskActionTypes.CHANGE_SETTINGS: {
+      return changeSettings( state, action.payload );
+    }
+    case TaskActionTypes.COMPLETE_TASK: {
+      return completeTask( state );
+    }
+    case TaskActionTypes.COUNT_DOWN: {
+      return countDown( state, action.payload );
     }
     case TaskActionTypes.INTERRUPT_TASK: {
       return interruptTask( state );
@@ -25,11 +32,8 @@ export function taskReducer(
     case TaskActionTypes.RESET_STATE: {
       return resetState();
     }
-    case TaskActionTypes.COMPLETE_TASK: {
-      return completeTask( state );
-    }
-    case TaskActionTypes.COUNT_DOWN: {
-      return countDown( state, action.payload );
+    case TaskActionTypes.START_TASK: {
+      return startTask( state, action.payload );
     }
   }
   
