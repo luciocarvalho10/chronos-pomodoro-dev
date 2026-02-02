@@ -4,6 +4,7 @@ import { ToastAdapter }                     from '../../adapters/ToastAdapter.ts
 import { Container }                        from '../../components/Container';
 import { DefaultButton }                    from '../../components/Defaultbutton';
 import { Heading }                          from '../../components/Heading';
+import { PROJECT_NAME }                     from '../../constants/constants.ts';
 import { TaskActionTypes }                  from '../../contexts/TaskContext/taskActionsTypes.ts';
 import { useTask }                          from '../../contexts/TaskContext/useTask.ts';
 import { MainTemplate }                     from '../../templates/MainTemplate';
@@ -36,6 +37,10 @@ export function History() {
       } )
     } ) );
   }, [ state.tasks ] );
+  
+  useEffect( () => {
+    document.title = `Histórico - ${PROJECT_NAME}`;
+  }, [] );
   
   useEffect( () => {
     if ( !clearHistory ) return;

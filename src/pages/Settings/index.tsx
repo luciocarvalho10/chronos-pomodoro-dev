@@ -1,20 +1,25 @@
-import { SaveIcon }               from 'lucide-react';
-import { type FormEvent, useRef } from 'react';
-import { ToastAdapter }           from '../../adapters/ToastAdapter.ts';
-import { Container }              from '../../components/Container';
-import { DefaultButton }          from '../../components/Defaultbutton';
-import { DefaultInput }           from '../../components/DefaultInput';
-import { Heading }                from '../../components/Heading';
-import { TaskActionTypes }        from '../../contexts/TaskContext/taskActionsTypes.ts';
-import { useTask }                from '../../contexts/TaskContext/useTask.ts';
-import { MainTemplate }           from '../../templates/MainTemplate';
-import styles                     from './styles.module.css';
+import { SaveIcon }                          from 'lucide-react';
+import { type FormEvent, useEffect, useRef } from 'react';
+import { ToastAdapter }                      from '../../adapters/ToastAdapter.ts';
+import { Container }                         from '../../components/Container';
+import { DefaultButton }                     from '../../components/Defaultbutton';
+import { DefaultInput }                      from '../../components/DefaultInput';
+import { Heading }                           from '../../components/Heading';
+import { PROJECT_NAME }                      from '../../constants/constants.ts';
+import { TaskActionTypes }                   from '../../contexts/TaskContext/taskActionsTypes.ts';
+import { useTask }                           from '../../contexts/TaskContext/useTask.ts';
+import { MainTemplate }                      from '../../templates/MainTemplate';
+import styles                                from './styles.module.css';
 
 export function Settings() {
   const {state, dispatch} = useTask();
   const workTimeInput = useRef<HTMLInputElement>( null );
   const shortBreakTimeInput = useRef<HTMLInputElement>( null );
   const longBreakTimeInput = useRef<HTMLInputElement>( null );
+  
+  useEffect( () => {
+    document.title = `Configurações - ${PROJECT_NAME}`;
+  }, [] );
   
   function handleSaveSettings(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();

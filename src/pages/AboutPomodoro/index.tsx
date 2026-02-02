@@ -1,11 +1,16 @@
+import { useEffect }    from 'react';
 import { Container }    from '../../components/Container';
 import { GenericHtml }  from '../../components/GenericHtml';
 import { Heading }      from '../../components/Heading';
 import { RouterLink }   from '../../components/RouterLink';
+import { PROJECT_NAME } from '../../constants/constants.ts';
 import { ROUTES }       from '../../router/routes.tsx';
 import { MainTemplate } from '../../templates/MainTemplate';
 
 export function AboutPomodoro() {
+  useEffect( () => {
+    document.title = `Entenda a Técnica Pomodoro - ${PROJECT_NAME}`;
+  }, [] );
   return (
     <MainTemplate >
       <Container >
