@@ -1,39 +1,46 @@
-import type { TaskModel } from '../../models/TaskModel.tsx';
+import type { TaskModel }      from '../../models/TaskModel.tsx';
+import type { TaskStateModel } from '../../models/TaskStateModel.tsx';
 
 export enum TaskActionTypes {
-  START_TASK = 'START_TASK',
+  CHANGE_SETTINGS = 'CHANGE_SETTINGS',
+  COMPLETE_TASK = 'COMPLETE_TASK',
+  COUNT_DOWN = 'COUNT_DOWN',
   INTERRUPT_TASK = 'INTERRUPT_TASK',
   RESET_STATE = 'RESET_STATE',
-  COUNT_DOWN = 'COUNT_DOWN',
-  COMPLETE_TASK = 'COMPLETE_TASK',
+  START_TASK = 'START_TASK',
 }
 
-type StartTask = {
-  type: TaskActionTypes.START_TASK;
-  payload: TaskModel
+type ChangeSettings = {
+  type: TaskActionTypes.CHANGE_SETTINGS;
+  payload: TaskStateModel['config']
+}
+type CompleteTask = {
+  type: TaskActionTypes.COMPLETE_TASK;
 }
 type CountDown = {
   type: TaskActionTypes.COUNT_DOWN;
   payload: { secondsRemaining: number }
 }
-type ResetState = {
-  type: TaskActionTypes.RESET_STATE;
-}
 type InterruptTask = {
   type: TaskActionTypes.INTERRUPT_TASK;
 }
-type CompleteTask = {
-  type: TaskActionTypes.COMPLETE_TASK;
+type ResetState = {
+  type: TaskActionTypes.RESET_STATE;
+}
+type StartTask = {
+  type: TaskActionTypes.START_TASK;
+  payload: TaskModel
 }
 
 export type TaskActionWithPayload =
-  | StartTask
-  | CountDown;
+  | ChangeSettings
+  | CountDown
+  | StartTask;
 
 export type TaskActionWithoutPayload =
-  | ResetState
   | InterruptTask
-  | CompleteTask;
+  | CompleteTask
+  | ResetState;
 
 export type TaskActionModel =
   | TaskActionWithPayload

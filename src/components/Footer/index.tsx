@@ -1,14 +1,22 @@
-import styles from './styles.module.css';
+import { ROUTES }     from '../../router/routes.tsx';
+import { RouterLink } from '../RouterLink';
+import styles         from './styles.module.css';
 
 export function Footer() {
   return (
-      <footer className={styles.footer}>
-        <a className={styles.footerLink} href='#'>
-          Entenda como funciona a técnica pomodoro
-        </a>
-        <a className={styles.footerLink} href='#'>
-          Chronos Pomodoro Dev &copy; { new Date().getFullYear()} - Feito com 💚
-        </a>
-      </footer>
+    <footer className={styles.footer}>
+      <RouterLink
+        className={styles.footerLink}
+        href={ROUTES.ABOUT_POMODORO.path}
+      >
+        Entenda como funciona a técnica pomodoro
+      </RouterLink >
+      <RouterLink
+        className={styles.footerLink}
+        href={ROUTES.HOME.path}
+      >
+        Chronos Pomodoro Dev &copy; {new Date().getFullYear()} - Feito com 💚
+      </RouterLink >
+    </footer >
   );
 }
